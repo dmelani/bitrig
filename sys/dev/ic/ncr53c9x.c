@@ -1950,7 +1950,7 @@ ncr53c9x_msgout(sc)
 		NCRCMD(sc, NCRCMD_TRANS);
 	} else {
 		/* (re)send the message */
-		size = min(sc->sc_omlen, sc->sc_maxxfer);
+		size = szmin(sc->sc_omlen, sc->sc_maxxfer);
 		NCRDMA_SETUP(sc, &sc->sc_omp, &sc->sc_omlen, 0, &size);
 		/* Program the SCSI counter */
 		NCR_SET_COUNT(sc, size);
