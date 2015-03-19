@@ -43,6 +43,8 @@
 #include <sys/malloc.h>
 #include <sys/pool.h>
 
+#pragma clang diagnostic warning "-Wshorten-64-to-32"
+
 /*
  * TODO: namecache access should really be locked.
  */
@@ -72,7 +74,7 @@ int doingcache = 1;			/* 1 => enable the cache */
 struct pool nch_pool;
 
 void cache_zap(struct namecache *);
-u_long nextvnodeid;
+unsigned int nextvnodeid;
 
 static int
 namecache_compare(struct namecache *n1, struct namecache *n2)
