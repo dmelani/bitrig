@@ -679,7 +679,7 @@ ufs_makedirentry(struct inode *ip, struct componentname *cnp,
 #endif
 	newdirp->d_ino = ip->i_number;
 	newdirp->d_namlen = cnp->cn_namelen;
-	memcpy(newdirp->d_name, cnp->cn_nameptr, cnp->cn_namelen + 1);
+	memcpy(newdirp->d_name, cnp->cn_nameptr, (size_t)cnp->cn_namelen + 1);
 	if (ITOV(ip)->v_mount->mnt_maxsymlinklen > 0)
 		newdirp->d_type = IFTODT(DIP(ip, mode));
   	else {
