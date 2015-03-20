@@ -79,8 +79,8 @@ fusefs_lookup(void *v)
 			return (ENOENT);
 
 		/* got a real entry */
-		fbuf = fb_setup(cnp->cn_namelen + 1, dp->ufs_ino.i_number,
-		    FBT_LOOKUP, p);
+		fbuf = fb_setup((size_t)cnp->cn_namelen + 1,
+		    dp->ufs_ino.i_number, FBT_LOOKUP, p);
 
 		memcpy(fbuf->fb_dat, cnp->cn_nameptr, cnp->cn_namelen);
 		fbuf->fb_dat[cnp->cn_namelen] = '\0';

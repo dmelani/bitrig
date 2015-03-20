@@ -583,7 +583,7 @@ fusefs_link(void *v)
 		goto out2;
 	}
 
-	fbuf = fb_setup(cnp->cn_namelen + 1, dip->ufs_ino.i_number,
+	fbuf = fb_setup((size_t)cnp->cn_namelen + 1, dip->ufs_ino.i_number,
 	    FBT_LINK, p);
 
 	fbuf->fb_io_ino = ip->ufs_ino.i_number;
@@ -643,12 +643,12 @@ fusefs_symlink(void *v)
 
 	len = strlen(target) + 1;
 
-	fbuf = fb_setup(len + cnp->cn_namelen + 1, dp->ufs_ino.i_number,
+	fbuf = fb_setup((size_t)len + cnp->cn_namelen + 1, dp->ufs_ino.i_number,
 	    FBT_SYMLINK, p);
 
 	memcpy(fbuf->fb_dat, cnp->cn_nameptr, cnp->cn_namelen);
 	fbuf->fb_dat[cnp->cn_namelen] = '\0';
-	memcpy(&fbuf->fb_dat[cnp->cn_namelen + 1], target, len);
+	memcpy(&fbuf->fb_dat[(size_t)cnp->cn_namelen + 1], target, len);
 
 	error = fb_queue(fmp->dev, fbuf);
 	if (error) {
@@ -909,7 +909,7 @@ fusefs_create(void *v)
 		goto out;
 	}
 
-	fbuf = fb_setup(cnp->cn_namelen + 1, ip->ufs_ino.i_number,
+	fbuf = fb_setup((size_t)cnp->cn_namelen + 1, ip->ufs_ino.i_number,
 	    FBT_CREATE, p);
 
 	fbuf->fb_io_mode = mode;
@@ -974,7 +974,7 @@ fusefs_mknod(void *v)
 		goto out;
 	}
 
-	fbuf = fb_setup(cnp->cn_namelen + 1, ip->ufs_ino.i_number,
+	fbuf = fb_setup((size_t)cnp->cn_namelen + 1, ip->ufs_ino.i_number,
 	    FBT_MKNOD, p);
 
 	fbuf->fb_io_mode = MAKEIMODE(vap->va_type, vap->va_mode);
@@ -1239,14 +1239,14 @@ abortit:
 		goto abortit;
 	}
 
-	fbuf = fb_setup(fcnp->cn_namelen + tcnp->cn_namelen + 2,
+	fbuf = fb_setup((size_t)fcnp->cn_namelen + tcnp->cn_namelen + 2,
 	    dp->ufs_ino.i_number, FBT_RENAME, p);
 
 	memcpy(fbuf->fb_dat, fcnp->cn_nameptr, fcnp->cn_namelen);
 	fbuf->fb_dat[fcnp->cn_namelen] = '\0';
 	memcpy(fbuf->fb_dat + fcnp->cn_namelen + 1, tcnp->cn_nameptr,
 	    tcnp->cn_namelen);
-	fbuf->fb_dat[fcnp->cn_namelen + tcnp->cn_namelen + 1] = '\0';
+	fbuf->fb_dat[(size_t)fcnp->cn_namelen + tcnp->cn_namelen + 1] = '\0';
 	fbuf->fb_io_ino = VTOI(tdvp)->ufs_ino.i_number;
 
 	error = fb_queue(fmp->dev, fbuf);
@@ -1304,7 +1304,7 @@ fusefs_mkdir(void *v)
 		goto out;
 	}
 
-	fbuf = fb_setup(cnp->cn_namelen + 1, ip->ufs_ino.i_number,
+	fbuf = fb_setup((size_t)cnp->cn_namelen + 1, ip->ufs_ino.i_number,
 	    FBT_MKDIR, p);
 
 	fbuf->fb_io_mode = MAKEIMODE(vap->va_type, vap->va_mode);
@@ -1377,7 +1377,7 @@ fusefs_rmdir(void *v)
 
 	VN_KNOTE(dvp, NOTE_WRITE | NOTE_LINK);
 
-	fbuf = fb_setup(cnp->cn_namelen + 1, dp->ufs_ino.i_number,
+	fbuf = fb_setup((size_t)cnp->cn_namelen + 1, dp->ufs_ino.i_number,
 	    FBT_RMDIR, p);
 	memcpy(fbuf->fb_dat, cnp->cn_nameptr, cnp->cn_namelen);
 	fbuf->fb_dat[cnp->cn_namelen] = '\0';
@@ -1436,7 +1436,7 @@ fusefs_remove(void *v)
 		goto out;
 	}
 
-	fbuf = fb_setup(cnp->cn_namelen + 1, dp->ufs_ino.i_number,
+	fbuf = fb_setup((size_t)cnp->cn_namelen + 1, dp->ufs_ino.i_number,
 	    FBT_UNLINK, p);
 	memcpy(fbuf->fb_dat, cnp->cn_nameptr, cnp->cn_namelen);
 	fbuf->fb_dat[cnp->cn_namelen] = '\0';
